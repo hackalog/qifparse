@@ -1,7 +1,7 @@
 QIF Parser
 ============
 
-.. image:: https://travis-ci.org/giacomos/qifparse.png?branch=master   
+.. image:: https://travis-ci.org/giacomos/qifparse.png?branch=master
     :target: https://travis-ci.org/giacomos/qifparse
 
 qifparse is a parser for Quicken interchange format files (.qif).
@@ -59,4 +59,4 @@ More infos
 For more informations about qif format:
 
 * http://en.wikipedia.org/wiki/Quicken_Interchange_Format
-* http://svn.gnucash.org/trac/browser/gnucash/trunk/src/import-export/qif-import/file-format.txt
+* https://github.com/Gnucash/gnucash/blob/master/gnucash/import-export/qif-imp/file-format.txt
