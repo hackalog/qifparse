@@ -11,6 +11,9 @@ ACCOUNT_TYPES = [
     'Oth L',
     'Invoice',  # Quicken for business only
     'Invst',
+    'Port',
+    '401(k)/403(b)',
+    'Mutual',
 ]
 
 MEMORIZED_TRANSACTION_TYPES = [
@@ -33,7 +36,8 @@ class Qif(object):
     def add_account(self, item):
         if not isinstance(item, Account):
             raise RuntimeError(six.u("item not recognized"))
-        self._accounts.append(item)
+        if not [a for a in self._accounts if (a.name == item.name and a.account_type == item.account_type)]:
+            self._accounts.append(item)
 
     def add_category(self, item):
         if not isinstance(item, Category):
@@ -99,7 +103,7 @@ class Qif(object):
             return tuple(self._transactions.values())
         else:
             tr = []
-            tr.extend(self._transactions.values)
+            tr.extend(self._transactions.values())
             for acc in self._accounts:
                 tr.extend(acc.transactions)
 

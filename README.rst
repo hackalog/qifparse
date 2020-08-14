@@ -54,6 +54,12 @@ Here's a sample of a structure creation::
    '!Type:Cat\nNfood\nE\n^\n!Account\nNMy Cc\nTBank\n^\n!Type:Bank\nD02/11/2013\nT...
    ...
 
+If you find that your QIF files date format has the month before day (like 12/25/2019 for December 25, 2019), then set 
+
+   QifParser.MONTH_IS_BEFORE_DAY_IN_DATES = True
+
+before calling QifParser.parse().
+
 More infos
 ============
 For more informations about qif format:
