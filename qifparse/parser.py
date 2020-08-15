@@ -68,15 +68,21 @@ class QifParser(object):
                     autoswitch = True
                 elif first_line == '!Clear:AutoSwitch':
                     autoswitch = False
-                chunk = '\n'.join(chunk.split('\n')[1:])
+                chunk = '\n'.join(chunk.split('\n')[1:]) # strip first line
                 first_line = chunk.split('\n')[0].rstrip()
             if first_line == '!Type:Cat':
                 last_type = 'category'
             elif first_line == '!Account':
                 last_type = 'account'
             elif first_line in NON_INVST_ACCOUNT_TYPES:
-                last_type = 'transaction'
-                transactions_header = first_line
+                second_line = chunk.split('\n')[1].rstrip()
+                if second_line == "!Account":
+                    chunk = '\n'.join(chunk.split('\n')[1:]) # strip first line
+                    first_line = chunk.split('\n')[0].rstrip()
+                    last_type = 'account'
+                else:
+                    last_type = 'transaction'
+                    transactions_header = first_line
             elif first_line == '!Type:Invst':
                 last_type = 'investment'
                 transactions_header = first_line
@@ -272,6 +278,9 @@ class QifParser(object):
         for line in lines:
             if not len(line) or line[0] == '\n' or line.startswith('!Type'):
                 continue
+            elif line[0] == '!':
+                # Shouldn't happen. !Account Needs to be handled in main loop
+                import pdb; pdb.set_trace()
             elif line[0] == 'D':
                 curItem.date = cls_.parseQifDateTime(line[1:])
             elif line[0] == 'N':

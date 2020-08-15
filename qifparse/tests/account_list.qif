@@ -1,0 +1,27 @@
+!Option:AutoSwitch
+!Account
+NMyBank-1234
+DBankName
+TBank
+^
+!Account
+NMyAcct2
+DBank Name
+TBank
+^
+!Clear:AutoSwitch
+!Type:Bank
+!Account
+NMyBank-1234
+DBankName
+TBank
+^
+!Type:Bank
+D05/08/2013
+T35.00
+CX
+N
+PTRANSFER OUT
+MTRANSFER IN
+L[MyAcct2]
+^
