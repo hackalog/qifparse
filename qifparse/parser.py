@@ -50,7 +50,8 @@ class QifParser(object):
             'transaction': cls_.parseTransaction,
             'investment': cls_.parseInvestment,
             'class': cls_.parseClass,
-            'memorized': cls_.parseMemorizedTransaction
+            'memorized': cls_.parseMemorizedTransaction,
+            'security': cls_.parseSecurity,
         }
         for chunk in chunks:
             if not chunk:
@@ -71,9 +72,8 @@ class QifParser(object):
             elif first_line == '!Type:Memorized':
                 last_type = 'memorized'
                 transactions_header = first_line
-            elif first_line in ('!Option:AutoSwitch', '!Clear:AutoSwitch'):
-                # currently assume only accounts are handled this way
-                last_type = 'account'
+            elif first_line == '!Type:Security':
+                last_type = 'security'
             elif chunk.startswith('!'):
                 raise QifParserException('Header not recognized: <{}>'.format(first_line))
             # if no header is recognized then
@@ -113,6 +113,22 @@ class QifParser(object):
         return curItem
 
     @classmethod
+    def parseSecurity(cls_, chunk):
+        """
+        """
+        curItem = Class()
+        lines = chunk.split('\n')
+        for line in lines:
+            if not len(line) or line[0] == '\n' or \
+                    line.startswith('!Type:Security'):
+                continue
+            elif line[0] == 'N':
+                curItem.name = line[1:]
+            elif line[0] == 'T':
+                curItem.account_type = line[1:]
+        return curItem
+
+    @classmethod
     def parseCategory(cls_, chunk):
         """
         """
@@ -145,7 +161,7 @@ class QifParser(object):
         curItem = Account()
         lines = chunk.split('\n')
         for line in lines:
-            if not len(line) or line[0] == '\n' or line.startswith('!Account') or line.startswith('!Option:AutoSwitch') or line.startswith('!Clear:AutoSwitch'):
+            if not len(line) or line[0] == '\n' or line.startswith('!Account'):
                 continue
             elif line[0] == 'N':
                 curItem.name = line[1:]

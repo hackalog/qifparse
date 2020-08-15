@@ -14,6 +14,7 @@ ACCOUNT_TYPES = [
     'Port',
     '401(k)/403(b)',
     'Mutual',
+    'Mutual Fund',
 ]
 
 MEMORIZED_TRANSACTION_TYPES = [
@@ -35,7 +36,7 @@ class Qif(object):
 
     def add_account(self, item):
         if not isinstance(item, Account):
-            raise RuntimeError(six.u("item not recognized"))
+            raise RuntimeError(six.u("item not recognized: " + type(item)))
         if not [a for a in self._accounts if (a.name == item.name and a.account_type == item.account_type)]:
             self._accounts.append(item)
 

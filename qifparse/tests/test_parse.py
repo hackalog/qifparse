@@ -8,6 +8,7 @@ from qifparse.parser import QifParser
 filename = os.path.join(os.path.dirname(__file__), 'file.qif')
 filename2 = os.path.join(os.path.dirname(__file__), 'transactions_only.qif')
 filename_multi = os.path.join(os.path.dirname(__file__), 'multiAccount.qif')
+filename_security = os.path.join(os.path.dirname(__file__), 'security.qif')
 
 
 class TestQIFParsing(unittest.TestCase):
@@ -39,6 +40,10 @@ class TestQIFParsing(unittest.TestCase):
 #        out.write(str(qif))
 #        out.close()
         self.assertEqual(data, str(qif))
+
+    def testSecurities(self):
+        with open(filename_security) as f:
+            qif = QifParser.parse(f)
 
     def testParseMultiAccountFile(self):
         with open(filename_multi) as f:
