@@ -1,0 +1,19 @@
+!Option:AutoSwitch
+!Account
+NBANK-1234
+DPC
+TBank
+^
+!Clear:AutoSwitch
+!Type:Security
+NDivident portfolio
+TMutual Fund
+^
+!Type:Security
+NGrowth
+TStock
+^
+!Type:Security
+NBalanced
+TMutual
+^

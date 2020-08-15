@@ -22,6 +22,11 @@ NON_INVST_ACCOUNT_TYPES = [
     '!Type:Invoice',  # Quicken for business only
 ]
 
+OPTIONS = [
+    '!Option:AllXfr',
+    '!Option:AutoSwitch',
+    '!Clear:AutoSwitch',
+]
 
 class QifParserException(Exception):
     pass
@@ -43,6 +48,7 @@ class QifParser(object):
         chunks = data.split('\n^\n')
         last_type = None
         last_account = None
+        autoswitch = False
         transactions_header = None
         parsers = {
             'category': cls_.parseCategory,
@@ -50,12 +56,20 @@ class QifParser(object):
             'transaction': cls_.parseTransaction,
             'investment': cls_.parseInvestment,
             'class': cls_.parseClass,
-            'memorized': cls_.parseMemorizedTransaction
+            'memorized': cls_.parseMemorizedTransaction,
+            'security': cls_.parseSecurity,
         }
         for chunk in chunks:
             if not chunk:
                 continue
             first_line = chunk.split('\n')[0].rstrip()
+            while first_line in OPTIONS: # Ignore this line
+                if first_line == '!Option:AutoSwitch':
+                    autoswitch = True
+                elif first_line == '!Clear:AutoSwitch':
+                    autoswitch = False
+                chunk = '\n'.join(chunk.split('\n')[1:])
+                first_line = chunk.split('\n')[0].rstrip()
             if first_line == '!Type:Cat':
                 last_type = 'category'
             elif first_line == '!Account':
@@ -71,13 +85,15 @@ class QifParser(object):
             elif first_line == '!Type:Memorized':
                 last_type = 'memorized'
                 transactions_header = first_line
-            elif first_line in ('!Option:AutoSwitch', '!Clear:AutoSwitch'):
-                # currently assume only accounts are handled this way
-                last_type = 'account'
+            elif first_line == '!Type:Security':
+                last_type = 'security'
             elif chunk.startswith('!'):
                 raise QifParserException('Header not recognized: <{}>'.format(first_line))
             # if no header is recognized then
             # we use the previous one
+            if last_type is None:
+                import pdb; pdb.set_trace()
+                pass
             item = parsers[last_type](chunk)
             if last_type == 'account':
                 qif_obj.add_account(item)
@@ -113,6 +129,22 @@ class QifParser(object):
         return curItem
 
     @classmethod
+    def parseSecurity(cls_, chunk):
+        """
+        """
+        curItem = Class()
+        lines = chunk.split('\n')
+        for line in lines:
+            if not len(line) or line[0] == '\n' or \
+                    line.startswith('!Type:Security'):
+                continue
+            elif line[0] == 'N':
+                curItem.name = line[1:]
+            elif line[0] == 'T':
+                curItem.account_type = line[1:]
+        return curItem
+
+    @classmethod
     def parseCategory(cls_, chunk):
         """
         """
@@ -145,7 +177,7 @@ class QifParser(object):
         curItem = Account()
         lines = chunk.split('\n')
         for line in lines:
-            if not len(line) or line[0] == '\n' or line.startswith('!Account') or line.startswith('!Option:AutoSwitch') or line.startswith('!Clear:AutoSwitch'):
+            if not len(line) or line[0] == '\n' or line.startswith('!Account'):
                 continue
             elif line[0] == 'N':
                 curItem.name = line[1:]
