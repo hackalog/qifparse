@@ -60,10 +60,10 @@ If you find that your QIF files date format has the month before day (like 12/25
 
 before calling QifParser.parse().
 
-More infos
+More info
 ============
 For more informations about qif format:
 
 * http://en.wikipedia.org/wiki/Quicken_Interchange_Format
-* http://svn.gnucash.org/trac/browser/gnucash/trunk/src/import-export/qif-import/file-format.txt
+* https://github.com/Gnucash/gnucash/blob/master/gnucash/import-export/qif-imp/file-format.txt
 * http://finance-qif.sourceforge.net/
