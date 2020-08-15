@@ -1,7 +1,7 @@
 QIF Parser
 ============
 
-.. image:: https://travis-ci.org/giacomos/qifparse.png?branch=master   
+.. image:: https://travis-ci.org/giacomos/qifparse.png?branch=master
     :target: https://travis-ci.org/giacomos/qifparse
 
 qifparse is a parser for Quicken interchange format files (.qif).
@@ -54,7 +54,7 @@ Here's a sample of a structure creation::
    '!Type:Cat\nNfood\nE\n^\n!Account\nNMy Cc\nTBank\n^\n!Type:Bank\nD02/11/2013\nT...
    ...
 
-If you find that your QIF files date format has the month before day (like 12/25/2019 for December 25, 2019), then set 
+If you find that your QIF files date format has the month before day (like 12/25/2019 for December 25, 2019), then set
 
    QifParser.MONTH_IS_BEFORE_DAY_IN_DATES = True
 
@@ -66,3 +66,4 @@ For more informations about qif format:
 
 * http://en.wikipedia.org/wiki/Quicken_Interchange_Format
 * http://svn.gnucash.org/trac/browser/gnucash/trunk/src/import-export/qif-import/file-format.txt
+* http://finance-qif.sourceforge.net/
