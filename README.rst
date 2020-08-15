@@ -60,7 +60,7 @@ If you find that your QIF files date format has the month before day (like 12/25
 
 before calling QifParser.parse().
 
-More infos
+More info
 ============
 For more informations about qif format:
 
