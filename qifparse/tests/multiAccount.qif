@@ -1,0 +1,58 @@
+!Option:AutoSwitch
+!Account
+NCity Checking
+TBank
+^
+NGlobal Credit Card
+TCCard
+L10,000
+^
+!Clear:AutoSwitch
+!Option:AutoSwitch
+!Account
+NCity Checking
+TBank
+^
+!Type:Bank
+D3/27' 3
+U0.00
+T0.00
+CX
+POpening Balance
+L[City Checking]
+^
+D1/ 2/92
+U123.45
+T123.45
+CX
+PDeposit
+LSalary
+^
+!Account
+NGlobal Credit Card
+TCCard
+L10,000
+^
+!Type:CCard
+D6/17'15
+U0.00
+T0.00
+CX
+POpening Balance
+L[Global Credit Card]
+^
+D6/18'15
+U-1,234.56
+T-1,234.56
+C*
+PLocal Store
+LFood
+^
+
+D6/19'15
+U1,234.56
+T1,234.56
+C*
+PLocal Store
+LFood
+^
