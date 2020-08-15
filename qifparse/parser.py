@@ -22,6 +22,11 @@ NON_INVST_ACCOUNT_TYPES = [
     '!Type:Invoice',  # Quicken for business only
 ]
 
+OPTIONS = [
+    '!Option:AllXfr',
+    '!Option:AutoSwitch',
+    '!Clear:AutoSwitch',
+]
 
 class QifParserException(Exception):
     pass
@@ -43,6 +48,7 @@ class QifParser(object):
         chunks = data.split('\n^\n')
         last_type = None
         last_account = None
+        autoswitch = False
         transactions_header = None
         parsers = {
             'category': cls_.parseCategory,
@@ -57,6 +63,13 @@ class QifParser(object):
             if not chunk:
                 continue
             first_line = chunk.split('\n')[0].rstrip()
+            while first_line in OPTIONS: # Ignore this line
+                if first_line == '!Option:AutoSwitch':
+                    autoswitch = True
+                elif first_line == '!Clear:AutoSwitch':
+                    autoswitch = False
+                chunk = '\n'.join(chunk.split('\n')[1:])
+                first_line = chunk.split('\n')[0].rstrip()
             if first_line == '!Type:Cat':
                 last_type = 'category'
             elif first_line == '!Account':
@@ -78,6 +91,9 @@ class QifParser(object):
                 raise QifParserException('Header not recognized: <{}>'.format(first_line))
             # if no header is recognized then
             # we use the previous one
+            if last_type is None:
+                import pdb; pdb.set_trace()
+                pass
             item = parsers[last_type](chunk)
             if last_type == 'account':
                 qif_obj.add_account(item)
